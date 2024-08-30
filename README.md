@@ -1,2 +1,3 @@
-# ibm-project
-'IBM Project'
+# Project Title
+
+Project description and instructions.
