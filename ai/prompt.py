@@ -1,7 +1,6 @@
 import os
 from dotenv import load_dotenv
 import re
-import yaml
 from ibm_watson_machine_learning.foundation_models import Model
 from ibm_watson_machine_learning.metanames import GenTextParamsMetaNames as GenParams
 from prompt_template import generate_prompt

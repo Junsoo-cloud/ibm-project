@@ -22,12 +22,12 @@ def create_prompt(age, gender, hr, incline, experience):
     return generate_prompt(age, gender, hr, incline, experience)
 
 # 프롬프트를 직접 문자열로 생성합니다.
-prompt = create_prompt(30, "male", 200, 4, "Intermediate")
+prompt = create_prompt(60, "female", 50, 2, "Intermediate")
 # print(prompt)
 def send_to_watsonxai(prompt,
                       model_name="meta-llama/llama-2-70b-chat",
                       decoding_method="greedy",
-                      max_new_tokens=1000,
+                      max_new_tokens=500,
                       min_new_tokens=30,
                       temperature=0.7,
                       repetition_penalty=1.2):
