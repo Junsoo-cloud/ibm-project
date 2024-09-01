@@ -1,6 +1,7 @@
 import os
 from dotenv import load_dotenv
 import re
+import yaml
 from ibm_watson_machine_learning.foundation_models import Model
 from ibm_watson_machine_learning.metanames import GenTextParamsMetaNames as GenParams
 from prompt_template import generate_prompt
@@ -95,7 +96,7 @@ prompt = f"{instruction}\n\n{context}\n\n{input_data}"
 prompts = [prompt]
 
 # Watsonx AI에 프롬프트 전송 및 응답 받기
-response = send_to_watsonxai(prompts, model_name="mistralai/mistral-large")
+response = send_to_watsonxai(prompts, model_name="ibm/granite-13b-instruct-v1")
 
 # 응답 출력 및 디버깅 정보
 # print("Response object type:", type(response))

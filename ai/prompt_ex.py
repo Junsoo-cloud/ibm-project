@@ -18,18 +18,18 @@ credentials = {
 }
 
 # 프롬프트 생성
-def create_prompt(age, gender, hr, incline, experience):
-    return generate_prompt(age, gender, hr, incline, experience)
+def create_prompt(age, gender, hr, incline, experience, goal_distance, distance_covered):
+    return generate_prompt(age, gender, hr, incline, experience, goal_distance, distance_covered)
 
 # 프롬프트를 직접 문자열로 생성합니다.
-prompt = create_prompt(60, "female", 50, 2, "Intermediate")
-# print(prompt)
+prompt = create_prompt(60, "male", 30, 4, "Intermediate", 10, 7)
+print(prompt)
 def send_to_watsonxai(prompt,
                       model_name="meta-llama/llama-2-70b-chat",
                       decoding_method="greedy",
-                      max_new_tokens=500,
+                      max_new_tokens=200,
                       min_new_tokens=30,
-                      temperature=0.7,
+                      temperature=0.2,
                       repetition_penalty=1.2):
     '''
     프롬프트 및 매개 변수를 watsonx.ai로 보내기 위한 function
@@ -81,9 +81,9 @@ STARCODER = 'bigcode/starcoder'
 MISTRAL_LARGE = "mistralai/mistral-large"
 
 # Watsonx AI에 프롬프트 전송 및 응답 받기
-response = send_to_watsonxai(prompt, model_name="meta-llama/llama-3-70b-instruct-batch")
+response = send_to_watsonxai(prompt, model_name="meta-llama/llama-3-1-8b-instruct")
 # print(f"type: {type(response)}") type check
-# print(response)
+print(response)
 # 응답 출력 및 디버깅 정보
 if isinstance(response, str) and len(response) > 0:
     # 정규 표현식으로 응답에서 원하는 패턴 추출
