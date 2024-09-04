@@ -72,16 +72,17 @@ def send_to_watsonxai(prompt,
 # Watsonx AI에 프롬프트 전송 및 응답 받기
 former_response = False
 response = send_to_watsonxai(prompt, model_name="meta-llama/llama-3-70b-instruct")
-# print(f"type: {type(response)}") type check
+
+# 응답 출력
 print(response)
-# 응답 출력 및 디버깅 정보
+
 if isinstance(response, str) and len(response) > 0:
     # 정규 표현식으로 응답에서 원하는 패턴 추출
     filtered_response = re.search(r'(Maintain Pace|Increase Pace|Decrease Pace)', response.strip())
     if filtered_response:
         if (filtered_response != former_response): # Only Different Response
             print(filtered_response.group())
-            former_response = filtered_response
+            former_response = filtered_response # 우리가 프론트로 보내야 하는 데이터(filtered_response)
         else: # Same Response
             print('Same Pace') 
     else:
@@ -89,14 +90,14 @@ if isinstance(response, str) and len(response) > 0:
 else:
     print("Response is empty or not a string.")
 
-
+# json 파일 읽기(db를 읽는 느낌)
 def read_json_file(filename):
     with open(filename, 'r') as file:
         data = json.load(file)
     return data
 
 
-# feedback
+# json 파일 저장
 json_file = 'sample_data.json'
 json_data = read_json_file(json_file)
 
