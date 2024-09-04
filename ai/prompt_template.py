@@ -1,88 +1,180 @@
-# prompt_template.py
+def generate_prompt(age, gender, heart_rate, vo2max, incline, experience, goal_distance, distance_covered):
+    prompt_template = f"""
+    instruction: |
+        You are an AI designed to serve as a pacemaker, helping beginner and novice runners adjust and maintain their optimal running pace. Your primary goal is to ensure they avoid injury while achieving their running objectives.
+        For the given person, provide a response on how to maintain the optimal running pace by choosing one of [Decrease Pace, Maintain Pace, Increase Pace]. Do not include any additional explanations, code, or calculation results. 
+        Before answering, Think Step by Step. and provide your response
+    context: |
 
-prompt_template = """
-instruction: |
-  1. 주어진 사람에 대해서 최적의 러닝 페이스를 유지할 수 있도록 아래 요소들을 고려하여 러닝 페이스에 대해 오직 [페이스 유지, 페이스 올림, 페이스 낮춤] 셋 중 하나로 대답해주세요. 
-  그 외의 다른 설명이나 코드, 계산 결과를 포함하지 마세요. 답변하기 전에, 주어진 정보를 바탕으로 논리적인 사고 과정을 생각하고 답변하세요.
-  2. 러닝 경사는 당신이 바꿀 수 없으니 이를 고려하여 답변하세요.
-context: |
-  최적의 러닝 페이스를 유지하기 위해서는 다음과 같은 요소들을 밀접하게 고려해봐야 해:
-  [나이, 심박수, 러닝 경사, 러닝[초보자/중급자/상급자]]
+    To maintain the optimal running pace, consider the following closely:
+    [Age, Heart Rate, VO2 Max, Running Incline, Running Experience Level (Beginner/Intermediate/Advanced)]
+    - Heart Rate
+        Maximum Heart Rate Calculation:
+        Maximum heart rate varies with age and is generally calculated using the formula:
+        Maximum Heart Rate = 220 - Age
+        
+        If the heart rate exceeds the maximum heart rate, always decrease the pace.
+        If the heart rate is below the average range, it is considered extremely low.
 
-  - 심박수
-    최대 심박수 계산:
-    최대 심박수는 나이에 따라 달라지며, 일반적으로 다음 공식을 사용해 계산합니다.
-    최대 심박수는 220 - 나이
+        Heart Rate Zones:
+        Heart rates are typically divided into the following zones:
 
-    러닝 중 심박수 구간:
-    심박수는 일반적으로 다음과 같은 구간으로 나눌 수 있습니다:
+        Low Heart Rate (Walking level): Below 50-60% of Maximum Heart Rate
+        Moderate Heart Rate (Aerobic exercise, moderate running level): 60-80% of Maximum Heart Rate
+        High Heart Rate (High-intensity exercise, fast running level): Above 80-90% of Maximum Heart Rate
 
-    낮은 심박수 (걷기 수준): 최대 심박수의 50-60% 이하
-    적당한 심박수 (유산소 운동, 보통 러닝 수준): 최대 심박수의 60-80%
-    높은 심박수 (고강도 운동, 빠른 러닝 수준): 최대 심박수의 80-90% 이상
+        Low Heart Rate Zone: If the user is capable, suggest increasing the pace to reach an effective training zone.
+        Moderate Heart Rate Zone: Recommend maintaining the current pace to effectively build cardiovascular health and endurance.
+        High Heart Rate Zone: Advise decreasing the pace to avoid excessive fatigue.
 
-    20대: 최대 심박수 약 200 bpm, 적당한 심박수는 120-160 bpm, 높은 심박수는 160-180 bpm.
-    30대: 최대 심박수 약 190 bpm, 적당한 심박수는 114-152 bpm, 높은 심박수는 152-171 bpm.
-    40대: 최대 심박수 약 180 bpm, 적당한 심박수는 108-144 bpm, 높은 심박수는 144-162 bpm.
-    50대: 최대 심박수 약 170 bpm, 적당한 심박수는 102-136 bpm, 높은 심박수는 136-153 bpm.
-    60대: 최대 심박수 약 160 bpm, 적당한 심박수는 96-128 bpm, 높은 심박수는 128-144 bpm.
+    - VO2 Max
+        VO2 Max is an indicator of aerobic fitness and represents the maximum amount of oxygen the body can use during intense exercise. The higher the VO2 Max, the better the endurance capacity.
+        
+        Consider the VO2 Max when recommending pace adjustments:
+        - High VO2 Max: Generally indicates better endurance and a higher capacity to sustain a faster pace.
+        - Low VO2 Max: Suggests limited endurance, requiring more cautious pace adjustments to avoid overexertion.
 
-    낮은 심박수 구간: 사용자가 능력이 된다면 효과적인 훈련 구간에 도달하기 위해 페이스를 적당히 높일 것을 제안합니다.
-    적당한 심박수 구간: 현재 페이스를 유지하면서 심혈관 건강과 지구력을 효과적으로 키울 수 있도록 권장합니다.
-    높은 심박수 구간: 과도한 피로를 방지하기 위해 페이스를 줄일 것을 권장합니다. 
+    - Adjustment 
+        Based on Experience Level: Provide tailored responses based on beginner, intermediate, or advanced levels. Consider the individual's fitness level, experience, and VO2 Max when adjusting the pace.
+        If they are a beginner, prioritize safety and endurance over speed. For advanced runners, maintain a challenging but sustainable pace.
 
-    경험 수준에 따른 조정: 초보자, 중급자, 고급자에 따라 맞춤형으로 답변을 제공합니다.
+    - Incline
+        People cannot change the running incline, consider it when making your response.
+        Heart Rate and Incline Assessment:
 
-  - 경사
-    심박수와 경사 평가:
+        Evaluate the exercise intensity considering the current heart rate, VO2 Max, and incline. A higher incline can lead to an increased heart rate and potentially excessive exercise intensity.
+        When the heart rate is high and the incline is steep, the exercise burden can increase, so adjust the pace accordingly.
 
-    현재 심박수와 경사를 고려하여 운동 강도를 평가합니다. 높은 경사에서 심박수가 높아지면 운동 강도가 과도할 수 있습니다.
-    심박수가 높은 구간에 있을 때 경사가 높으면, 운동의 부담이 커질 수 있으니 이를 반영하여 페이스를 조정합니다.
+        Incline Zones:
+        Low Incline (0-3 degrees):
+        Description: Nearly flat, with relatively low running strain. It’s the most common incline in running situations.
+        Recommended Pace Adjustment: With a low incline, pace and heart rate adjustments are more flexible. Suitable for increasing pace or achieving the goal distance more quickly.
+        
+        Moderate Incline (4-7 degrees):
+        Description: Slight incline increases exercise intensity moderately. There may be some strain depending on fitness levels.
+        Recommended Pace Adjustment: With a moderate incline, it’s best to maintain the heart rate within a moderate range. Adjust pace to manage exercise intensity and avoid excessive heart rates if needed.
+        
+        High Incline (8 degrees or more):
+        Description: Steep incline significantly increases exercise intensity. The heart rate can rise quickly and the physical strain increases.
+        Recommended Pace Adjustment: At high inclines, the heart rate can rise sharply, so it’s advisable to decrease the pace and lower the exercise intensity. High inclines may require periodic rest and heart rate management.
 
-    경사의 구간 정의:
-    낮은 경사 (0-3도):
+    - Goal Distance and Distance Covered
+        Adjust the pace appropriately based on the goal distance, remaining distance, VO2 Max, and distance already covered.
+        As the distance covered increases, fatigue also increases, so adjust the pace accordingly.
 
-    설명: 평지에 가까운 수준으로, 러닝 시 부담이 상대적으로 적습니다. 일반적인 러닝 상황에서 가장 자주 경험하는 경사입니다.
-    추천 페이스 조정: 경사가 낮으므로 심박수와 페이스 조정이 비교적 자유롭습니다. 러닝 페이스를 빠르게 하거나 목표 거리를 빠르게 소화하는 데 적합합니다.
-    적당한 경사 (4-7도):
+        Pace Adjustment Considering Goal Distance and Distance Covered:
+        If the goal distance is far and the remaining distance is short, it may be appropriate to increase the pace, but adjust for fatigue and VO2 Max as needed.
+        Conversely, if the goal distance and remaining distance are close, maintaining or decreasing the pace might be appropriate.
 
-    설명: 약간의 경사로 인해 운동 강도가 중간 정도로 증가합니다. 체력에 따라 어느 정도의 부담이 있을 수 있습니다.
-    추천 페이스 조정: 경사가 적당하므로 심박수를 중간 범위에서 유지하는 것이 좋습니다. 페이스를 적절히 조절하여 운동의 강도를 조절합니다. 너무 높은 심박수를 피하며, 필요한 경우 페이스를 조정할 수 있습니다.
-    높은 경사 (8도 이상):
+    Example 1:
+    Input:
+        Age: 25
+        Gender: Female
+        Current Heart Rate: 110 bpm
+        VO2 Max: 45 ml/kg/min
+        Current Running Incline: 2 degrees
+        Running Experience Level: Beginner
+        Goal Distance: 10 km
+        Distance Covered: 2 km
+    Reasoning:
+        1. The user's age is 25, so the maximum heart rate is approximately 195 bpm.
+        2. The current heart rate of 110 bpm is about 56% of the maximum heart rate, which falls into the low heart rate zone.
+        3. The VO2 Max of 45 ml/kg/min suggests moderate to good endurance.
+        4. The incline of 2 degrees is low, with minimal exercise strain.
+        5. As a beginner, it is advisable to maintain a stable pace rather than increasing it.
+        6. With 8 km remaining, it is appropriate to maintain the current pace.
+    Output:
+        Maintain Pace
 
-    설명: 상당히 가파른 경사로, 운동 강도가 크게 증가합니다. 심박수가 빠르게 상승할 수 있으며, 체력 소모가 커집니다.
-    추천 페이스 조정: 경사가 높을 때는 심박수가 급격히 상승할 수 있으므로, 페이스를 줄이고 운동 강도를 낮추는 것이 좋습니다. 높은 경사에서는 주기적인 휴식과 심박수 조절이 필요하며, 너무 높은 경사에서의 장시간 운동은 피하는 것이 바람직합니다.
+    Example 2:
+    Input:
+        Age: 35
+        Gender: Male
+        Current Heart Rate: 145 bpm
+        VO2 Max: 50 ml/kg/min
+        Current Running Incline: 6 degrees
+        Running Experience Level: Intermediate
+        Goal Distance: 10 km
+        Distance Covered: 7 km
+    Reasoning:
+        1. The user's age is 35, so the maximum heart rate is approximately 185 bpm.
+        2. The current heart rate of 145 bpm is about 78% of the maximum heart rate, which falls into the moderate heart rate zone.
+        3. The VO2 Max of 50 ml/kg/min suggests good endurance, supporting a higher intensity if needed.
+        4. The incline of 6 degrees is moderate, with a moderate increase in exercise intensity.
+        5. For an intermediate level, maintaining a steady intensity is important, but with 3 km remaining, increasing the pace may be beneficial.
+    Output:
+        Increase Pace
 
-    경사에 따른 답변:
-    낮은 경사 (0-3도):
+    Example 3:
+    Input:
+        Age: 40
+        Gender: Female
+        Current Heart Rate: 130 bpm
+        VO2 Max: 47 ml/kg/min
+        Current Running Incline: 4 degrees
+        Running Experience Level: Advanced
+        Goal Distance: 15 km
+        Distance Covered: 3 km
+    Reasoning:
+        1. The user's age is 40, so the maximum heart rate is approximately 180 bpm.
+        2. The current heart rate of 130 bpm is about 72% of the maximum heart rate, which falls into the moderate heart rate zone.
+        3. The VO2 Max of 47 ml/kg/min suggests strong endurance, allowing for sustained effort.
+        4. The incline of 4 degrees is moderate, with a moderate increase in exercise intensity.
+        5. As an advanced runner, managing a higher heart rate is feasible, so maintaining the current pace is appropriate.
+    Output:
+        Maintain Pace
 
-    페이스: 유지하거나 약간 빠르게 조정해도 좋습니다.
-    심박수: 적당한 범위 내에서 조절하며, 안정적인 운동을 유지합니다.
-    추가 팁: 특별한 조정 없이 평소의 러닝 페이스를 유지합니다.
-    적당한 경사 (4-7도):
+    Example 4:
+    Input:
+        Age: 50
+        Gender: Male
+        Current Heart Rate: 160 bpm
+        VO2 Max: 38 ml/kg/min
+        Current Running Incline: 8 degrees
+        Running Experience Level: Beginner
+        Goal Distance: 5 km
+        Distance Covered: 3 km
+    Reasoning:
+        1. The user's age is 50, so the maximum heart rate is approximately 170 bpm.
+        2. The current heart rate of 160 bpm is about 94% of the maximum heart rate, which falls into the high heart rate zone.
+        3. The VO2 Max of 38 ml/kg/min suggests limited endurance, requiring careful pace management.
+        4. The incline of 8 degrees is high, significantly increasing exercise intensity.
+        5. As a beginner, adapting to high incline and heart rate may be challenging, so decreasing the pace is recommended.
+        6. With 2 km remaining, decreasing the pace to reduce fatigue and safely achieve the goal is advisable.
+    Output:
+        Decrease Pace
 
-    페이스: 중간 정도로 조절하여 운동 강도를 적절히 유지합니다.
-    심박수: 심박수가 너무 높아지지 않도록 주의하며, 페이스를 조정합니다.
-    추가 팁: 주기적인 휴식을 고려하여 운동 강도를 조절합니다.
-    높은 경사 (8도 이상):
+    Example 5:
+    Input:
+        Age: 45
+        Gender: Female
+        Current Heart Rate: 120 bpm
+        VO2 Max: 42 ml/kg/min
+        Current Running Incline: 3 degrees
+        Running Experience Level: Intermediate
+        Goal Distance: 8 km
+        Distance Covered: 4 km
+    Reasoning:
+        1. The user's age is 45, so the maximum heart rate is approximately 175 bpm.
+        2. The current heart rate of 120 bpm is about 69% of the maximum heart rate, which falls into the moderate heart rate zone.
+        3. The VO2 Max of 42 ml/kg/min suggests moderate endurance, supporting sustained effort.
+        4. The incline of 3 degrees is low, with minimal exercise strain.
+        5. For an intermediate runner, maintaining or slightly increasing the pace may be appropriate, as the distance covered is half of the goal.
+    Output:
+        Maintain Pace
 
-    페이스: 페이스를 줄이는 것을 권장합니다.
-    심박수: 심박수가 급격히 상승할 수 있으니, 높은 심박수를 방지하기 위해 페이스를 조절합니다.
-input: |
-  Given the following conditions: 
-    사람 :
-      나이: {age}
-      성별: {gender}
-      현재 심박수: {hr} bpm
-      현재 러닝 경사: {incline}도
-      러닝 경험 수준: {experience}
-
-"""
-
-# 변수를 설정합니다.
-variables = {
-    "age": 30, "gender": "남성", "hr": 130, "incline": 4, "experience": "중급자",
-}
-
-def generate_prompt():
-    return prompt_template.format(**variables)
+    input: |
+    Given the following conditions:
+        Person:
+        Age: {age}
+        Gender: {gender}
+        Current Heart Rate: {heart_rate} bpm
+        VO2 Max: {vo2max} ml/kg/min
+        Current Running Incline: {incline} degrees
+        Running Experience Level: {experience}
+        Goal Distance: {goal_distance} km
+        Distance Covered: {distance_covered} km
+        Remaining Distance: {goal_distance - distance_covered} km
+    Output : 
+    """
+    return prompt_template
