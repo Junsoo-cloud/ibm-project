@@ -23,17 +23,8 @@ credentials = {
 def create_prompt(age, gender, heart_rate, incline, experience, goal_distance, distance_covered):
     return generate_prompt(age, gender, heart_rate, incline, experience, goal_distance, distance_covered)
 
-model = 'bigscience/mt0-xxl', 'codellama/codellama-34b-instruct-hf', 'google/flan-t5-xl', 'google/flan-t5-xxl', 
-'google/flan-ul2', 'ibm/granite-13b-chat-v2', 'ibm/granite-13b-instruct-v2', 'ibm/granite-20b-code-instruct', 
-'ibm/granite-20b-multilingual', 'ibm/granite-34b-code-instruct', 'ibm/granite-3b-code-instruct', 'ibm/granite-7b-lab',
-'ibm/granite-8b-code-instruct', 'ibm/slate-125m-english-rtrvr', 'ibm/slate-125m-english-rtrvr-v2', 'ibm/slate-30m-english-rtrvr', 
-'ibm/slate-30m-english-rtrvr-v2', 'intfloat/multilingual-e5-large', 'meta-llama/llama-2-13b-chat', 'meta-llama/llama-2-70b-chat',
-'meta-llama/llama-3-1-70b-instruct', 'meta-llama/llama-3-1-8b-instruct', 'meta-llama/llama-3-405b-instruct',
-'meta-llama/llama-3-70b-instruct', 'meta-llama/llama-3-70b-instruct-batch', 'meta-llama/llama-3-8b-instruct', 
-'mistralai/mistral-large', 'mistralai/mixtral-8x7b-instruct-v01', 'sentence-transformers/all-minilm-l12-v2'
-
 # 프롬프트를 직접 문자열로 생성합니다.
-prompt = generate_prompt(60, "male", 51, 40, 4, "Intermediate", 10, 7)
+prompt = generate_prompt(60, "male", 251, 40, 4, "Intermediate", 10, 7)
 print(prompt)
 def send_to_watsonxai(prompt,
                       model_name,
@@ -88,7 +79,7 @@ if isinstance(response, str) and len(response) > 0:
     # 정규 표현식으로 응답에서 원하는 패턴 추출
     filtered_response = re.search(r'(Maintain Pace|Increase Pace|Decrease Pace)', response.strip())
     if filtered_response:
-        if (filtered_response != former_response): # Different Response
+        if (filtered_response != former_response): # Only Different Response
             print(filtered_response.group())
             former_response = filtered_response
         else: # Same Response
@@ -114,13 +105,14 @@ age = 30  # 예시 값, 실제로는 다른 소스에서 가져와야 함
 gender = 'Male'  # 예시 값
 
 # 피드백 프롬프트 생성
+def feedback_prompt(age, gender, json_data):
+    feedback_prompt = generate_analysis_feedback_prompt(age, gender, json_data)
+    response = send_to_watsonxai(feedback_prompt, model_name="meta-llama/llama-3-70b-instruct")
 
-feedback_prompt = generate_analysis_feedback_prompt(age, gender, json_data)
-response = send_to_watsonxai(feedback_prompt, model_name="meta-llama/llama-3-70b-instruct")
-
-# validation check
-if isinstance(response, str) and len(response) > 0:
-    print(f"feedback : {response}")
-else:
-    print("Response is empty or not a string.")
-
+    # validation check
+    if isinstance(response, str) and len(response) > 0:
+        print(f"feedback : {response}")
+        return response
+    else:
+        return 'Response is empty or not a string.'
+    
